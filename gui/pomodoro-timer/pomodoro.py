@@ -1,6 +1,9 @@
 from tkinter import *
 from PIL import Image, ImageTk
-import winsound
+import subprocess
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Define the full loop sequence: (Session Name, Duration in Minutes)
 SESSIONS = [
@@ -12,53 +15,41 @@ SESSIONS = [
 
 current_session_index = 0
 time_left = SESSIONS[current_session_index][1] * 60
-
 is_running = True
 timer_id = None
 
-
 def countdown():
     global time_left, is_running, timer_id, current_session_index
-
     if not is_running:
         return
-
     minutes = time_left // 60
     seconds = time_left % 60
-
     counter_label.config(text=f"{minutes:02}:{seconds:02}")
-
     if time_left > 0:
         time_left -= 1
         timer_id = window.after(1000, countdown)
     else:
         # 1. Trigger window pop and native audio alert
         trigger_alert()
-
         # 2. Advance to the next scheduled session block
         current_session_index = (current_session_index + 1) % len(SESSIONS)
-
         # 3. Pull fresh session variables
         session_name, minutes_duration = SESSIONS[current_session_index]
         time_left = minutes_duration * 60
-
         # 4. Instant UI Text Updates
         status_label.config(text=session_name)
         counter_label.config(text=f"{minutes_duration:02}:00")
-
         # 5. Cadence Fix: Subtract first second immediately to bypass transition lag
         time_left -= 1
         timer_id = window.after(1000, countdown)
-
 
 def trigger_alert():
     # Force application window above all other background applications
     window.attributes("-topmost", True)
     window.attributes("-topmost", False)
     window.lift()
-    # Play clean native Windows Asterisk chime
-    winsound.MessageBeep(winsound.MB_ICONASTERISK)
-
+    # Play system alert sound
+    play_test_sound()
 
 def toggle_pause():
     global is_running, timer_id
@@ -74,10 +65,9 @@ def toggle_pause():
         pause_button.config(text="Pause")
         countdown()
 
-
 def play_test_sound():
-    winsound.MessageBeep(winsound.MB_ICONASTERISK)
-
+    subprocess.run(["canberra-gtk-play", "-i", "complete"],
+                   stderr=subprocess.DEVNULL)
 
 # --- Window Initialization ---
 window = Tk()
@@ -85,12 +75,14 @@ window.title("Pomodoro Timer")
 window.geometry("400x400")
 
 # --- Asset Management ---
-image = Image.open("background.jpg")  # replace with a local image path
-image = image.resize((400, 400))
-photo = ImageTk.PhotoImage(image)
-
-image_label = Label(window, image=photo)
-image_label.place(x=0, y=0)
+try:
+    image = Image.open(os.path.join(BASE_DIR, "sisyphus_unbothered.jpg"))  # replace with a local image path
+    image = image.resize((400, 400))
+    photo = ImageTk.PhotoImage(image)
+    image_label = Label(window, image=photo)
+    image_label.place(x=0, y=0)
+except FileNotFoundError:
+    window.config(bg="black")
 
 # --- UI Element Layouts ---
 status_label = Label(
@@ -137,5 +129,4 @@ sound_button.place(relx=0.65, rely=0.88, anchor="center")
 
 # Run initial execution loop
 countdown()
-
 window.mainloop()
