@@ -1,12 +1,3 @@
-# # # # # NOTE TO GITHUB USER # # # # #
-# if you are pulling this program to use it, you will not have hangman_words.py or hangman_art.py
-# and will need to correct the code, adding your own word list and either deleting the 'print stages' statement
-# or creating a list 'stages' with your own artwork
-# you might also consider removing the 'from hangman... import ...' lines of code
-# # # # # END GITHUB USER NOTE # # # # #
-
-
-
 # We are using the random module to select a random word from the word list, so we need to include it here.
 import random
 # We want to import our 'word list' and our 'stages' drawings from these other programs, which we can do with

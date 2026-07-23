@@ -2,7 +2,7 @@ from tkinter import *
 
 def miles_to_km():
     miles = float(miles_input.get())
-    km = miles * 1.689
+    km = miles * 1.609
     kilometer_result_label.config(text=f"{km}")
 
 window = Tk()

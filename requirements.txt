@@ -1,0 +1,10 @@
+# Third-party packages used across this repo (stdlib covers the rest).
+# gui/password-manager
+cryptography>=42.0
+pyperclip>=1.8
+# gui/pomodoro-timer
+Pillow>=10.0
+# api/iss-tracker-with-alerts
+requests>=2.31
+# games/states-quiz, data/
+pandas>=2.0

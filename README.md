@@ -27,5 +27,5 @@ organized by category.
 
 This started as course exercises from a self-paced Python class. Files have
 been reorganized by category and renamed to describe the work itself rather
-than the course they came from. I've used Claude Code to help with README
-files and reorganization along with occasional debugging and improvements.
+than the course they came from, with fixes and improvements made along the
+way.
